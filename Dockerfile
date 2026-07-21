@@ -5,7 +5,7 @@
 # first boot.
 # =========================================================
 
-FROM nvidia/cuda:12.6.0-cudnn-runtime-ubuntu24.04
+FROM nvidia/cuda:12.8.0-cudnn-runtime-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -36,8 +36,8 @@ RUN git clone --depth 1 --branch ${REPO_REF} ${REPO_URL} . \
 
 # ---- Python deps ---------------------------------------------------
 RUN uv python pin 3.12 \
-    && uv sync --extra cu126 --frozen --no-install-project || uv sync --extra cu126
-RUN uv sync --extra cu126
+    && uv sync --extra cu128 --frozen --no-install-project || uv sync --extra cu128
+RUN uv sync --extra cu128
 
 # Extra deps used by the WebUI + Whisper auto-transcription feature
 RUN uv pip install -r requirements.txt \
