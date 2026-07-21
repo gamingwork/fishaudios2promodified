@@ -11,12 +11,13 @@ if [ -n "${PUBLIC_KEY:-}" ]; then
     service ssh start || (mkdir -p /run/sshd && /usr/sbin/sshd)
 fi
 
+cd /app
 mkdir -p /workspace/checkpoints /workspace/references
 
 S2_DIR="/workspace/checkpoints/s2-pro"
 if [ ! -f "${S2_DIR}/codec.pth" ]; then
     log "S2-Pro checkpoint not found, downloading from HuggingFace (fishaudio/s2-pro)..."
-    huggingface-cli download fishaudio/s2-pro --local-dir "${S2_DIR}"
+    uv run huggingface-cli download fishaudio/s2-pro --local-dir "${S2_DIR}"
 else
     log "S2-Pro checkpoint already present, skipping download."
 fi
@@ -25,7 +26,7 @@ WHISPER_DIR="${WHISPER_MODEL_DIR:-/workspace/checkpoints/whisper-small-pt}"
 if [ ! -d "${WHISPER_DIR}" ] || [ -z "$(ls -A "${WHISPER_DIR}" 2>/dev/null)" ]; then
     log "Downloading Whisper model (${WHISPER_MODEL:-small})..."
     mkdir -p "${WHISPER_DIR}"
-    python - <<PYEOF
+    uv run python - <<PYEOF
 import whisper, os
 whisper.load_model(os.environ.get("WHISPER_MODEL", "small"), download_root=os.environ.get("WHISPER_MODEL_DIR"))
 PYEOF
