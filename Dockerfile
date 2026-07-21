@@ -40,8 +40,8 @@ RUN uv python pin 3.12 \
 RUN uv sync --extra cu126
 
 # Extra deps used by the WebUI + Whisper auto-transcription feature
-RUN uv pip install --system -r requirements.txt \
-    && uv pip install --system huggingface_hub[cli] hf_transfer
+RUN uv pip install -r requirements.txt \
+    && uv pip install huggingface_hub[cli] hf_transfer
 
 # ---- Runtime env ----------------------------------------------------
 ENV HF_HUB_ENABLE_HF_TRANSFER=1 \
